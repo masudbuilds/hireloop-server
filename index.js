@@ -42,6 +42,15 @@ app.get("/users", async (req, res) => {
 
 
 // Jobs related APIs
+
+// API endpoint to get all jobs
+app.get("/jobs", async (req, res) => {
+  const cursor = jobsCollection.find({});
+  const result = await cursor.toArray();
+  res.send(result);
+})
+
+// API endpoint to create a new job 
 app.post("/jobs", async (req, res) => {
   const job = req.body;
   const result = await jobsCollection.insertOne(job);

@@ -10,8 +10,8 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
+// MongoDB connection
 const client = new MongoClient(process.env.MONGO_URI);
-
 export async function ConnectToMongoDB() {
   try{
     await client.connect();
@@ -24,11 +24,24 @@ export async function ConnectToMongoDB() {
 
 // Connect to MongoDB when the server starts
 const ConnectedClient = await ConnectToMongoDB();
+const database = ConnectedClient.db("hireloop");
+const usersCollection = database.collection("user");
 
+// API endpoint to check if the server is running
 app.get("/", (req, res) => {
-  res.send("Hireloop server is running");
+  res.send({msg: "Hireloop server is running"});
 })
 
+// API endpoint to get all users
+app.get("/users", async (req, res) => {
+  const cursor = usersCollection.find({});
+  const result = await cursor.toArray();
+  res.send(result);
+})
+
+
+
+// Start the server
 app.listen(port, () => {
   console.log(`Hireloop server is running on port ${port}`);
 })

@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
-import {MongoClient} from "mongodb";
+import {MongoClient, ObjectId} from "mongodb";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -54,6 +54,13 @@ app.get("/jobs", async (req, res) => {
 app.post("/jobs", async (req, res) => {
   const job = req.body;
   const result = await jobsCollection.insertOne(job);
+  res.send(result);
+})
+
+// API endpoint to delete a job by ID
+app.delete("/jobs/:id", async (req, res) => {
+  const id = req.params.id;
+  const result = await jobsCollection.deleteOne({ _id: new ObjectId(id) });
   res.send(result);
 })
 

@@ -26,6 +26,7 @@ export async function ConnectToMongoDB() {
 const ConnectedClient = await ConnectToMongoDB();
 const database = ConnectedClient.db("hireloop");
 const usersCollection = database.collection("user");
+const jobsCollection = database.collection("jobs");
 
 // API endpoint to check if the server is running
 app.get("/", (req, res) => {
@@ -39,6 +40,13 @@ app.get("/users", async (req, res) => {
   res.send(result);
 })
 
+
+// Jobs related APIs
+app.post("/jobs", async (req, res) => {
+  const job = req.body;
+  const result = await jobsCollection.insertOne(job);
+  res.send(result);
+})
 
 
 // Start the server

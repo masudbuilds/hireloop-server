@@ -51,6 +51,19 @@ app.get("/jobs", async (req, res) => {
     if(req.query.type) {
       query.type = req.query.type;
     }
+    if(req.query.workplace) {
+      query.workplace = req.query.workplace;
+    }
+    if(req.query.salary) {
+      const salaryRange = req.query.salary.split("-");
+      if (salaryRange.length === 2) {
+        const minSalary = parseInt(salaryRange[0], 10);
+        const maxSalary = parseInt(salaryRange[1], 10);
+        if (!isNaN(minSalary) && !isNaN(maxSalary)) {
+          query.salary = { $gte: minSalary, $lte: maxSalary };
+        }
+      }
+    }
     if(req.query.isRemote) {
       query.isRemote = req.query.isRemote === "true";
     }

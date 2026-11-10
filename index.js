@@ -88,6 +88,13 @@ app.get("/jobs", async (req, res) => {
   res.send(result);
 })
 
+// API endpoint to get a job by ID
+app.get("/jobs/:id", async (req, res) => {
+  const id = req.params.id;
+  const result = await jobsCollection.findOne({ _id: new ObjectId(id) });
+  res.send(result);
+})
+
 // API endpoint to create a new job 
 app.post("/jobs", async (req, res) => {
   const job = req.body;

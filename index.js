@@ -117,6 +117,19 @@ app.post("/applications", async (req, res) => {
   res.send(result);
 })
 
+app.get("/applications", async (req, res) => {
+  const query = {};
+  if (req.query.seekerEmail) {
+    query.seekerEmail = req.query.seekerEmail;
+  }
+  if (req.query.jobId) {
+    query.jobId = req.query.jobId;
+  }
+  const cursor = applicationsCollection.find(query);
+  const result = await cursor.toArray();
+  res.send(result);
+})
+
 
 // Start the server
 app.listen(port, () => {

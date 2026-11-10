@@ -57,10 +57,14 @@ app.get("/jobs", async (req, res) => {
     if(req.query.category) {
       query.category = req.query.category;
     }
+    if (req.query.location && typeof req.query.location === "string" && req.query.location.trim()) {
+      const sanitizedLocation = req.query.location.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      query.location = { $regex: sanitizedLocation, $options: "i" };
+    }
     if(req.query.search) {
       query.$or = [
         { title: { $regex: req.query.search, $options: "i" } },
-        {company: { $regex: req.query.search, $options: "i" } },
+        { company: { $regex: req.query.search, $options: "i" } },
         { responsibilities: { $regex: req.query.search, $options: "i" } },
         { requirements: { $regex: req.query.search, $options: "i" } },
       ];

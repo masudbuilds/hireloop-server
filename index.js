@@ -27,6 +27,7 @@ const ConnectedClient = await ConnectToMongoDB();
 const database = ConnectedClient.db("hireloop");
 const usersCollection = database.collection("user");
 const jobsCollection = database.collection("jobs");
+const applicationsCollection = database.collection("applications");
 
 // API endpoint to check if the server is running
 app.get("/", (req, res) => {
@@ -106,6 +107,13 @@ app.post("/jobs", async (req, res) => {
 app.delete("/jobs/:id", async (req, res) => {
   const id = req.params.id;
   const result = await jobsCollection.deleteOne({ _id: new ObjectId(id) });
+  res.send(result);
+})
+
+// application related APIs
+app.post("/applications", async (req, res) => {
+  const application = req.body;
+  const result = await applicationsCollection.insertOne(application);
   res.send(result);
 })
 
